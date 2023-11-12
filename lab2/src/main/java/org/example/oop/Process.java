@@ -3,12 +3,14 @@ package org.example.oop;
 public class Process extends Element {
     private int queue, maxqueue, failure;
     private double meanQueue;
+    private double meanLoad;
 
     public Process(double delay) {
         super(delay);
         queue = 0;
         maxqueue = Integer.MAX_VALUE;
         meanQueue = 0.0;
+        setTnext(Double.MAX_VALUE);
     }
 
     @Override
@@ -34,6 +36,9 @@ public class Process extends Element {
             setQueue(getQueue() - 1);
             super.setState(1);
             super.setTnext(super.getTcurr() + super.getDelay());
+        }
+        if (getNextElement() != null) {
+            getNextElement().inAct();
         }
     }
 
@@ -66,9 +71,14 @@ public class Process extends Element {
     @Override
     public void doStatistics(double delta) {
         meanQueue = getMeanQueue() + queue * delta;
+        meanLoad = getMeanLoad() + getState() * delta;
     }
 
     public double getMeanQueue() {
         return meanQueue;
+    }
+
+    public double getMeanLoad() {
+        return meanLoad;
     }
 }
