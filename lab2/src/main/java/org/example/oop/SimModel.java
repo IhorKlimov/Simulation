@@ -36,6 +36,6 @@ public class SimModel {
         list.add(p3);
 
         Model model = new Model(list);
-        model.simulate(10.0);
+        model.simulate(1000.0);
     }
 }
