@@ -58,7 +58,7 @@ public class Process extends Element {
     }
 
     @Override
-    public void outAct() {
+    public void outAct() throws Exception {
         super.outAct();
 
         super.setTnext(Double.MAX_VALUE);
@@ -86,8 +86,9 @@ public class Process extends Element {
             super.setState(1);
             super.setTnext(super.getTcurr() + super.getDelay());
         }
-        if (getNextElement() != null) {
-            getNextElement().inAct();
+        Element nextElement = getNextElement();
+        if (nextElement != null) {
+            nextElement.inAct();
         }
     }
 

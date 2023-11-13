@@ -6,7 +6,7 @@ public class Create extends Element {
     }
 
     @Override
-    public void outAct() {
+    public void outAct() throws Exception {
         super.outAct();
         super.setTnext(super.getTcurr() + super.getDelay());
         super.getNextElement().inAct();

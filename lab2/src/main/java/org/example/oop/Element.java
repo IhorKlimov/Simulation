@@ -1,5 +1,9 @@
 package org.example.oop;
 
+import java.security.InvalidParameterException;
+import java.util.List;
+import java.util.Random;
+
 public class Element {
     private String name;
     private double tnext;
@@ -8,7 +12,7 @@ public class Element {
     private int quantity;
     private double tcurr;
     private int state;
-    private Element nextElement;
+    private List<NextElement> nextElements;
     private static int nextId = 0;
     private int id;
 
@@ -18,7 +22,7 @@ public class Element {
         distribution = "exp";
         tcurr = tnext;
         state = 0;
-        nextElement = null;
+        nextElements = null;
         id = nextId;
         nextId++;
         name = "element" + id;
@@ -31,7 +35,7 @@ public class Element {
         distribution = "";
         tcurr = tnext;
         state = 0;
-        nextElement = null;
+        nextElements = null;
         id = nextId;
         nextId++;
         name = "element" + id;
@@ -44,7 +48,7 @@ public class Element {
         distribution = "exp";
         tcurr = tnext;
         state = 0;
-        nextElement = null;
+        nextElements = null;
         id = nextId;
         nextId++;
         name = "element" + id;
@@ -105,18 +109,40 @@ public class Element {
         this.state = state;
     }
 
-    public Element getNextElement() {
-        return nextElement;
+    public List<NextElement> getNextElements() {
+        return nextElements;
     }
 
-    public void setNextElement(Element nextElement) {
-        this.nextElement = nextElement;
+    public void setNextElements(List<NextElement> nextElements) {
+        float sum = 0f;
+        for (NextElement nextElement : nextElements) {
+            sum += nextElement.getProbability();
+        }
+        if (sum != 1f) {
+            throw new InvalidParameterException("Total sum of probabilities should equal to 1.0");
+        }
+
+        this.nextElements = nextElements;
+    }
+
+    public Element getNextElement() {
+        float rand = new Random().nextFloat();
+        float currentValue = 0f;
+        if (nextElements != null) {
+            for (NextElement nextElement : nextElements) {
+                currentValue += nextElement.getProbability();
+                if (rand < currentValue) {
+                    return nextElement.getElement();
+                }
+            }
+        }
+        return null;
     }
 
     public void inAct() {
     }
 
-    public void outAct() {
+    public void outAct() throws Exception {
         quantity++;
     }
 
