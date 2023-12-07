@@ -118,7 +118,7 @@ public class Element {
         for (NextElement nextElement : nextElements) {
             sum += nextElement.getProbability();
         }
-        if (sum != 1f) {
+        if (sum != 1f && !nextElements.isEmpty()) {
             throw new InvalidParameterException("Total sum of probabilities should equal to 1.0");
         }
 

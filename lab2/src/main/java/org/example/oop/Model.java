@@ -53,9 +53,6 @@ public class Model {
     public void printResult() {
         System.out.println("\n-------------RESULTS-------------");
         int numOfTasks = 0;
-        int numOfNotProcessed = 0;
-        double meanQueue = 0;
-        double meanLoad = 0;
         double failureProbability = 0;
         for (Element e : list) {
             if (e instanceof Create) {
@@ -67,25 +64,20 @@ public class Model {
             e.printResult();
             if (e instanceof Process) {
                 Process p = (Process) e;
-                if (numOfTasks - p.getQuantity() > numOfNotProcessed) {
-                    numOfNotProcessed = numOfTasks - p.getQuantity();
-                }
-                meanQueue += p.getMeanQueue() / tcurr;
-                meanLoad += p.getMeanLoad() / tcurr;
+                int numOfNotProcessed = numOfTasks - p.getQuantity();
+                double meanQueue = p.getMeanQueue() / tcurr;
                 failureProbability += p.getFailure() / (double) p.getQuantity();
-
 
                 System.out.println(
                         "mean length of queue = " + p.getMeanQueue() / tcurr +
                                 "\nmean load = " + p.getMeanLoad() / tcurr +
                                 "\nfailure probability = " + p.getFailure() / (double) p.getQuantity());
-
+                System.out.println("Number of non-processed tasks = " + numOfNotProcessed);
+                System.out.println("Mean length of queue = " + (meanQueue / (list.size() - 1)));
+                System.out.println("------------------------------------");
             }
         }
 
-        System.out.println("\nTotal number of non-processed tasks = " + numOfNotProcessed);
-        System.out.println("Total mean length of queue = " + (meanQueue / (list.size() - 1)));
-        System.out.println("Total mean load = " + (meanLoad / (list.size() - 1)));
         System.out.println("Total failure probability = " + (failureProbability / (list.size() - 1)));
     }
 }
